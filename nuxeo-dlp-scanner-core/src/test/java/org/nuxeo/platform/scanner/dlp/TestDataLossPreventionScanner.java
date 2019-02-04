@@ -30,6 +30,7 @@ import javax.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.Blob;
@@ -53,6 +54,7 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Features(CoreFeature.class)
 @Deploy("org.nuxeo.ecm.core.test")
 @Deploy("org.nuxeo.platform.scanner.dlp.core")
+@Ignore
 public class TestDataLossPreventionScanner {
 
     @Inject
@@ -66,10 +68,7 @@ public class TestDataLossPreventionScanner {
 
     @Before
     public void setUp() {
-        /*
-         * String skipCheck = System.getenv("GOOGLE_CREDENTIALS_SET"); if (skipCheck == null) {
-         * assertNotNull(System.getenv("GOOGLE_APPLICATION_CREDENTIALS")); }
-         */
+        Assert.assertNotNull(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
     }
 
     protected Blob getFakeBlob(int size, String name) {
