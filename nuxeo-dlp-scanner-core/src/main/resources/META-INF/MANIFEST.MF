@@ -1,0 +1,9 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: org.nuxeo.platform.scanner.dlp
+Bundle-Version: 1.0.0
+Bundle-Name: nuxeo-dlp-scanner-core
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.nuxeo.platform.scanner.dlp.core;singleton=true
+Nuxeo-Component: OSGI-INF/core-types-contrib.xml,OSGI-INF/dlp-service-contrib.xml,OSGI-INF/listeners-contrib.xml

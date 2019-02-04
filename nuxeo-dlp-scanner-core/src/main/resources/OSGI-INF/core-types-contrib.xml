@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.dlp.core.types">
+
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="datalossprevention" prefix="dlp" src="schemas/dlpinfo.xsd"/>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <facet name="DataLossPrevention">
+      <schema name="datalossprevention"/>
+    </facet>
+  </extension>
+
+</component>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.platform.scanner.dlp.service.ScanComponent" version="1.0">
+
+  <implementation class="org.nuxeo.platform.scanner.dlp.service.ScanComponent"/>
+
+  <service>
+    <provide interface="org.nuxeo.platform.scanner.dlp.DataLossPreventionScanner"/>
+  </service>
+
+  <extension-point name="configuration">
+    <documentation>Used to the default behavior of the service</documentation>
+    <object class="org.nuxeo.platform.scanner.dlp.service.ScanConfigurationDescriptor"/>
+  </extension-point>
+
+  <extension-point name="provider">
+    <documentation>Used to define a new data loss prevention service provider</documentation>
+    <object class="org.nuxeo.platform.scanner.dlp.service.ScanProviderDescriptor"/>
+  </extension-point>
+
+  <extension target="org.nuxeo.platform.scanner.dlp.service.ScanComponent" point="configuration">
+    <configuration>
+      <defaultProviderName>${org.nuxeo.dlp.default.provider:=google}</defaultProviderName>
+    </configuration>
+    <provider name="google" class="org.nuxeo.platform.scanner.dlp.google.GoogleDLPScanProvider"/>
+  </extension>
+
+  <extension target="org.nuxeo.platform.scanner.dlp.service.ScanComponent" point="provider">
+    <provider name="google" class="org.nuxeo.platform.scanner.dlp.google.GoogleDLPScanProvider"/>
+  </extension>
+
+</component>

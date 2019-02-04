@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="http://www.nuxeo.org/ecm/schemas/dlp/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:nxs="http://www.nuxeo.org/ecm/schemas/dlp/">
+
+  <xs:element name="scanStatus" type="xs:string"/>
+  <xs:element name="scanDate" type="xs:date"/>
+  <xs:element name="sensitiveData" type="xs:boolean" default="false"/>
+
+  <xs:element name="findings" type="nxs:findingsList"/>
+
+  <xs:complexType name="findingsList">
+    <xs:sequence>
+      <xs:element name="finding" type="nxs:finding" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="finding">
+    <xs:sequence>
+      <xs:element name="info" type="xs:string"/>
+      <xs:element name="type" type="xs:string"/>
+      <xs:element name="score" type="xs:string" default="VERY_UNLIKELY"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
