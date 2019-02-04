@@ -73,6 +73,8 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
     Likelihood sensitivity = Likelihood.LIKELY;
 
     private int maxFindings = 5;
+    
+    private boolean enabled = true;
 
     private boolean convertToText = true;
 
@@ -103,6 +105,7 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
         // Load Project ID
         projectId = Framework.getProperty(API_PROJECT, ServiceOptions.getDefaultProjectId());
 
+        enabled = Boolean.parseBoolean(Framework.getProperty(ENABLED, "true"));
         includeQuote = Boolean.parseBoolean(Framework.getProperty(INCLUDE_QUOTE, "true"));
         convertToText = Boolean.parseBoolean(Framework.getProperty(CONVERT_TO_TEXT, "true"));
 
@@ -158,7 +161,7 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
      */
     @Override
     public boolean isEnabled() {
-        return dlpServiceSettings != null;
+        return enabled && dlpServiceSettings != null;
     }
 
     @Override

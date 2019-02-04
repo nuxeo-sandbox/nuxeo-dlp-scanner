@@ -137,6 +137,9 @@ public class DLPScannerProcessor extends AbstractLongRunningListener {
                 if (results != null && results.size() > 0) {
                     for (String path : results.keySet()) {
                         ScanResult res = results.get(path);
+                        if (res == null) {
+                            continue;
+                        }
                         if (res.hasSensitiveData()) {
                             sensitive = true;
                         }

@@ -21,10 +21,44 @@ mvn clean install
 
 ## Configure (nuxeo.conf)
 
-Editor properties:
+Obtain a Google Credentials JSON file and set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable with the path to the file.
+
+See: https://cloud.google.com/docs/authentication/production
+
+The service role should be assigned at least the `DLP User` role.  The Scanner service will work without any additional configuration.
+
+### Google DLP Scanner Default Properties
 
 ```
-TBD
+# Stop checks by setting this to false
+google.dlp.enabled=(true)|false
+
+# List of Info Types to use
+# See: https://cloud.google.com/dlp/docs/infotypes-reference
+google.dlp.infotypes=CREDIT_CARD_NUMBER,IBAN_CODE,SWIFT_CODE,US_SOCIAL_SECURITY_NUMBER,US_PASSPORT,US_INDIVIDUAL_TAXPAYER_IDENTIFICATION_NUMBER,US_EMPLOYER_IDENTIFICATION_NUMBER,US_BANK_ROUTING_MICR
+
+# Sensitivity and Likelihood one of:
+# UNRECOGNIZED
+# LIKELIHOOD_UNSPECIFIED
+# VERY_UNLIKELY
+# UNLIKELY
+# POSSIBLE
+# LIKELY
+# VERY_LIKELY
+google.dlp.likelyhood=POSSIBLE
+google.dlp.sensitivity=POSSIBLE
+
+# Maximum number of findings before terminating
+google.dlp.maxfindings=5
+
+# Attach the sensitive data item as metadata
+google.dlp.quote=(true)|false
+
+# Convert non-text types to textual representations
+google.dlp.convert=(true)|false
+
+# GCP Project Name (not required when credentials are properly configured)
+google.dlp.api.project=ProjectName
 ```
 
 ## Support

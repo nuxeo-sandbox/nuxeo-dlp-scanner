@@ -27,6 +27,8 @@ public interface GoogleDLPConstants {
 
     String DLP_NAME = "google.dlp";
 
+    String ENABLED = DLP_NAME + ".enabled";
+
     String API_PROJECT = DLP_NAME + ".api.project";
 
     String INFOTYPES = DLP_NAME + ".infotypes";
@@ -38,7 +40,7 @@ public interface GoogleDLPConstants {
     String MAX_FINDINGS = DLP_NAME + ".maxfindings";
 
     String INCLUDE_QUOTE = DLP_NAME + ".quote";
-    
+
     String CONVERT_TO_TEXT = DLP_NAME + ".convert";
 
     String DETAILS = DLP_NAME + ".details";
