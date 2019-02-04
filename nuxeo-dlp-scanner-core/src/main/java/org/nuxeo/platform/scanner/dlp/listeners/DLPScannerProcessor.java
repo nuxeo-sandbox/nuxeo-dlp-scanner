@@ -131,6 +131,7 @@ public class DLPScannerProcessor extends AbstractLongRunningListener {
                 @SuppressWarnings("unchecked")
                 Map<String, ScanResult> results = (Map<String, ScanResult>) data.get(key);
                 Property findingProp = doc.getProperty(DLPScanConstants.DLP_FINDINGS);
+
                 boolean failed = false;
                 boolean sensitive = false;
                 if (results != null && results.size() > 0) {
@@ -143,6 +144,7 @@ public class DLPScannerProcessor extends AbstractLongRunningListener {
                             failed = true;
                         }
                         if (res.getFindings() != null) {
+                            findingProp.remove();
                             for (ScanFinding f : res.getFindings()) {
                                 Map<String, String> fmap = new HashMap<>();
                                 fmap.put("info", f.getInfo());

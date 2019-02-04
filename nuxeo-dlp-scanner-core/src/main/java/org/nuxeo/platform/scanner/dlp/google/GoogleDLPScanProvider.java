@@ -181,7 +181,7 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
             return ScanResult.makeFailed();
         }
 
-        if (blob != null) {
+        if (blob != null && (blob.getLength() == -1 || blob.getLength() > 0)) {
             return inspectBlob(blob, features, maxResults);
         }
 
@@ -245,10 +245,11 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
                 }
             }
 
-            ByteContentItem byteContentItem = ByteContentItem.newBuilder()
-                                                             .setType(bytesType)
-                                                             .setData(ByteString.readFrom(blob.getStream()))
-                                                             .build();
+            ByteString bytes = ByteString.readFrom(blob.getStream());
+            if (bytes.size() == 0) {
+                return new ScanResult(Collections.emptyList());
+            }
+            ByteContentItem byteContentItem = ByteContentItem.newBuilder().setType(bytesType).setData(bytes).build();
             ContentItem contentItem = ContentItem.newBuilder().setByteItem(byteContentItem).build();
 
             FindingLimits findingLimits = FindingLimits.newBuilder()
