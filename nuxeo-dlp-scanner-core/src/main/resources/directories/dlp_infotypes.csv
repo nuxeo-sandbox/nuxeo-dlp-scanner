@@ -24,7 +24,7 @@ id,label,obsolete
 "IMEI_HARDWARE_ID","Phone IMEI number",0
 "INDIA_PAN_INDIVIDUAL","India permanent account number",0
 "IP_ADDRESS","IP address",0
-"JAPAN_INDIVIDUAL_NUMBER","Japan individual number or "My Number"",0
+"JAPAN_INDIVIDUAL_NUMBER","Japan individual number or 'My Number'",0
 "JAPAN_PASSPORT","Japan passport number",0
 "KOREA_PASSPORT","Korea passport number",0
 "KOREA_RRN","Korea resident registration number",0
