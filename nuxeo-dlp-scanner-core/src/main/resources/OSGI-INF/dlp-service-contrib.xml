@@ -28,4 +28,10 @@
     <provider name="google" class="org.nuxeo.platform.scanner.dlp.google.GoogleDLPScanProvider"/>
   </extension>
 
+  <extension point="directories" target="org.nuxeo.ecm.directory.GenericDirectory">
+    <directory extends="template-vocabulary" name="dlp_infotypes">
+      <dataFile>directories/dlp_infotypes.csv</dataFile>
+    </directory>
+  </extension>
+
 </component>

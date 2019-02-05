@@ -73,7 +73,7 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
     Likelihood sensitivity = Likelihood.LIKELY;
 
     private int maxFindings = 5;
-    
+
     private boolean enabled = true;
 
     private boolean convertToText = true;
@@ -349,21 +349,21 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
      *
      * @param filter The filter to use, e.g. "supported_by=INSPECT"
      * @param languageCode The BCP-47 language code to use, e.g. 'en-US'
+     * @throws IOException
      */
-    protected void listInfoTypes(String filter, String languageCode) throws Exception {
-
-        // Instantiate a DLP client
+    public List<InfoTypeDescription> getInfoTypes(String filter, String languageCode) throws IOException {
         try (DlpServiceClient dlpClient = DlpServiceClient.create()) {
-            ListInfoTypesRequest listInfoTypesRequest = ListInfoTypesRequest.newBuilder()
-                                                                            .setFilter(filter)
-                                                                            .setLanguageCode(languageCode)
-                                                                            .build();
-            ListInfoTypesResponse infoTypesResponse = dlpClient.listInfoTypes(listInfoTypesRequest);
-            List<InfoTypeDescription> infoTypeDescriptions = infoTypesResponse.getInfoTypesList();
-            for (InfoTypeDescription infoTypeDescription : infoTypeDescriptions) {
-                System.out.println("Name : " + infoTypeDescription.getName());
-                System.out.println("Display name : " + infoTypeDescription.getDisplayName());
+            ListInfoTypesRequest.Builder builder = ListInfoTypesRequest.newBuilder();
+            if (filter != null) {
+                builder.setFilter(filter);
             }
+            if (languageCode != null) {
+                builder.setLanguageCode(languageCode);
+            }
+
+            ListInfoTypesRequest request = builder.build();
+            ListInfoTypesResponse infoTypesResponse = dlpClient.listInfoTypes(request);
+            return infoTypesResponse.getInfoTypesList();
         }
     }
 
