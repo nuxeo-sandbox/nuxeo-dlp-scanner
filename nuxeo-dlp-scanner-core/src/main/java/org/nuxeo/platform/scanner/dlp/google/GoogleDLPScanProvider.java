@@ -109,6 +109,8 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
         } catch (IOException iox) {
             log.error("Error loading Google Authentication Credentials", iox);
             log.error("Data Loss Prevention scanning will be unavailable");
+            enabled = false;
+            return;
         }
 
         // Load Project ID
@@ -308,11 +310,17 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
 
     @Override
     public Blob redactBlob(Blob blob, List<String> features) {
+        if (!enabled) {
+            throw new NuxeoException("Renditions are disabled");
+        }
         return renditionProvider.redact(blob, features);
     }
 
     @Override
     public Blob redactDocument(DocumentModel doc, List<String> features) {
+        if (!enabled) {
+            throw new NuxeoException("Renditions are disabled");
+        }
         return renditionProvider.redact(doc, features);
     }
 

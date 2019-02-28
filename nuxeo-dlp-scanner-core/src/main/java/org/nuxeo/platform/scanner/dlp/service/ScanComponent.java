@@ -22,6 +22,7 @@ package org.nuxeo.platform.scanner.dlp.service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
             ScanProviderDescriptor desc = (ScanProviderDescriptor) contribution;
             try {
                 ScanProvider provider = (ScanProvider) desc.getKlass().getConstructor().newInstance();
-                providers.put(desc.getProviderName(), provider);
+                    providers.put(desc.getProviderName(), provider);
             } catch (ReflectiveOperationException e) {
                 throw new NuxeoException(e);
             }
@@ -131,6 +132,10 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
             throw new NuxeoException("Unknown provider: " + providerName);
         }
 
+        if (!provider.isEnabled()) {
+            return Collections.emptyList();
+        }
+
         if (blobs == null || blobs.size() == 0) {
             throw new IllegalArgumentException("Input Blob list cannot be null or empty");
         } else if (!provider.checkBlobs(blobs)) {
@@ -171,6 +176,10 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
     @Override
     public List<Blob> redact(String providerName, List<Blob> blobs, List<String> features) {
         ScanProvider provider = providers.get(providerName);
+        if (!provider.isEnabled()) {
+            return Collections.emptyList();
+        }
+
         RedactionProvider redact = null;
         if (provider.supportsRedaction()) {
             redact = (RedactionProvider) provider;

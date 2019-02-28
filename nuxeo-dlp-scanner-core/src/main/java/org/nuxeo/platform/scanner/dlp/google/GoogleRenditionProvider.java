@@ -70,7 +70,7 @@ public class GoogleRenditionProvider implements RenditionProvider {
      */
     @Override
     public boolean isAvailable(DocumentModel doc, RenditionDefinition definition) {
-        return true;
+        return Boolean.parseBoolean(Framework.getProperty(GoogleDLPConstants.ENABLED, "true"));
     }
 
     /*
