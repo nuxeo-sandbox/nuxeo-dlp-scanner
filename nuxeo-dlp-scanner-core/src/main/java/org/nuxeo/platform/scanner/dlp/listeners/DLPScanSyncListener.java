@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ import org.nuxeo.runtime.api.Framework;
  * This listener detects if Blobs have been modified inside the doc, and if yes, it will raise the dlpScanNeeded so that
  * the async listener can do the real job in async mode.
  * <p/>
- * The work done in sync includes extracting dirty Blobs xpath that are then tranmisted to the Async listener using a
+ * The work done in sync includes extracting dirty Blobs xpath that are then transmitted to the Async listener using a
  * custom extended {@link DLPScanEventContext}
  *
- * @author <a href="mailto:tdelprat@nuxeo.com">Tiry</a>
+ * @since 10.10
  */
 public class DLPScanSyncListener implements EventListener {
 
@@ -63,7 +63,7 @@ public class DLPScanSyncListener implements EventListener {
                 // ignore the event - we are blocked by the caller
                 return;
             }
-            
+
             if (targetDoc == null) {
                 // ignore the event - we need a document
                 return;

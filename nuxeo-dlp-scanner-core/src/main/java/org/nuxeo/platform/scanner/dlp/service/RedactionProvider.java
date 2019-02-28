@@ -23,7 +23,9 @@ import java.util.List;
 import org.nuxeo.ecm.core.api.Blob;
 
 /**
- * @author dbrown
+ * Redaction provider interface
+ * 
+ * @since 10.10
  */
 public interface RedactionProvider {
 

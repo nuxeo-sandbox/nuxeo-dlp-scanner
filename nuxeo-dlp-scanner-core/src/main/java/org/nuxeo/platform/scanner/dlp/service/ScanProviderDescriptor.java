@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017 Nuxeo (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  * Contributors:
- *     Michael Vachette
+ *     Damon Brown
  */
 package org.nuxeo.platform.scanner.dlp.service;
 
@@ -26,7 +26,9 @@ import org.nuxeo.common.xmap.annotation.XNodeMap;
 import org.nuxeo.common.xmap.annotation.XObject;
 
 /**
- *
+ * Configure a data loss prevention scan provider
+ * 
+ * @since 10.10
  */
 @XObject("provider")
 public class ScanProviderDescriptor {

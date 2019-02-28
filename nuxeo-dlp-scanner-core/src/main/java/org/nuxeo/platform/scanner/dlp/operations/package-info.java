@@ -16,23 +16,8 @@
  * Contributors:
  *     Damon Brown
  */
-package org.nuxeo.platform.scanner.dlp.service;
-
-import org.nuxeo.common.xmap.annotation.XNode;
-import org.nuxeo.common.xmap.annotation.XObject;
-
 /**
- * Configure a scan provider
- * 
- * @since 10.10
+ * @author dbrown
+ *
  */
-@XObject("configuration")
-public class ScanConfigurationDescriptor {
-
-    @XNode("defaultProviderName")
-    protected String defaultProviderName;
-
-    public String getDefaultProviderName() {
-        return defaultProviderName;
-    }
-}
+package org.nuxeo.platform.scanner.dlp.operations;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ import org.nuxeo.runtime.api.Framework;
  * <li>update the target documents based on the result collected from the {@link ScanProvider} (transactional)</li>
  * </ul>
  *
- * @author <a href="mailto:tdelprat@nuxeo.com">Tiry</a>
+ * @since 10.10
  */
 public class DLPScannerProcessor extends AbstractLongRunningListener {
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import org.nuxeo.ecm.core.api.Blob;
 /**
  * Interface that should be implemented to encapsulate call to a Data Loss Prevention Scanning service : command line or
  * WebService
+ * 
+ * @since 10.10
  */
 public interface ScanProvider {
 

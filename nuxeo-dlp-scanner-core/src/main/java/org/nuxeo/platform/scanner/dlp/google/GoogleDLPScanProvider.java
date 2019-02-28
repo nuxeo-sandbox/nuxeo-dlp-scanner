@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.activation.MimetypesFileTypeMap;
 
@@ -67,7 +68,7 @@ import com.google.privacy.dlp.v2.RedactImageResponse;
 import com.google.protobuf.ByteString;
 
 /**
- * @author dbrown
+ * @since 10.10
  */
 public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, GoogleDLPConstants {
 
@@ -181,24 +182,16 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
     }
 
     @Override
-    public List<ScanResult> identify(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException {
-        List<ScanResult> results = new LinkedList<>();
-        for (Blob b : blobs) {
-            results.add(scanBlob(b, features, maxResults));
-        }
-        return results;
+    public List<Blob> redact(List<Blob> blobs, List<String> features) {
+        return blobs.stream().map(b -> redactBlob(b, features)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Blob> redact(List<Blob> blobs, List<String> features) {
-        List<Blob> results = new LinkedList<>();
-        for (Blob b : blobs) {
-            results.add(redactBlob(b, features));
-        }
-        return results;
+    public List<ScanResult> identify(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException {
+        return blobs.stream().map(b -> inspect(b, features, maxResults)).collect(Collectors.toList());
     }
 
-    protected ScanResult scanBlob(Blob blob, List<String> features, Integer maxResults) {
+    protected ScanResult inspect(Blob blob, List<String> features, Integer maxResults) {
         if (!isEnabled()) {
             return ScanResult.makeFailed();
         }
@@ -261,10 +254,9 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
             // Override info types
             List<InfoType> infoTypes = infoTypesList;
             if (features != null && !features.isEmpty()) {
-                infoTypes = new LinkedList<>();
-                for (String infoType : features) {
-                    infoTypes.add(InfoType.newBuilder().setName(infoType).build());
-                }
+                infoTypes = features.stream()
+                                    .map(type -> InfoType.newBuilder().setName(type).build())
+                                    .collect(Collectors.toList());
             }
 
             ByteString bytes = ByteString.readFrom(blob.getStream());
@@ -321,12 +313,6 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
     }
 
     public Blob redactBlob(Blob blob, List<String> features) {
-        // String projectId = "my-project-id";
-        // String filePath = "path/to/image.png";
-
-        // Initialize client that will be used to send requests. This client only needs to be created
-        // once, and can be reused for multiple requests. After completing all of your requests, call
-        // the "close" method on the client to safely clean up any remaining background resources.
         try (DlpServiceClient dlp = DlpServiceClient.create()) {
             // Specify the project used for request.
             ProjectName project = ProjectName.of(projectId);
@@ -362,10 +348,9 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
             // Override info types
             List<InfoType> infoTypes = infoTypesList;
             if (features != null && !features.isEmpty()) {
-                infoTypes = new LinkedList<>();
-                for (String infoType : features) {
-                    infoTypes.add(InfoType.newBuilder().setName(infoType).build());
-                }
+                infoTypes = features.stream()
+                                    .map(type -> InfoType.newBuilder().setName(type).build())
+                                    .collect(Collectors.toList());
             }
 
             InspectConfig config = InspectConfig.newBuilder()
@@ -405,8 +390,8 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
      * @param maxFindings The maximum number of findings to report per request (0 = server maximum)
      */
     protected void createInspectTemplate(String displayName, String templateId, String description) {
-        try (DlpServiceClient dlpServiceClient = DlpServiceClient.create()) {
-
+        try (DlpServiceClient dlpClient = DlpServiceClient.create()) {
+            String project = ProjectName.of(projectId).toString();
             FindingLimits findingLimits = FindingLimits.newBuilder().setMaxFindingsPerRequest(maxFindings).build();
 
             // Construct the inspection configuration for the template
@@ -423,16 +408,15 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                                                       .build();
 
             CreateInspectTemplateRequest request = CreateInspectTemplateRequest.newBuilder()
-                                                                               .setParent(ProjectName.of(projectId)
-                                                                                                     .toString())
+                                                                               .setParent(project)
                                                                                .setInspectTemplate(template)
                                                                                .setTemplateId(templateId)
                                                                                .build();
 
-            InspectTemplate response = dlpServiceClient.createInspectTemplate(request);
-            System.out.printf("Template created: %s", response.getName());
+            InspectTemplate response = dlpClient.createInspectTemplate(request);
+            log.info("Template created: " + response.getName());
         } catch (Exception e) {
-            System.out.printf("Error creating template: %s", e.getMessage());
+            log.error("Error creating template", e);
         }
     }
 

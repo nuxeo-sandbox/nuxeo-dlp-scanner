@@ -43,7 +43,7 @@ import org.nuxeo.platform.scanner.dlp.DataLossPreventionScanner;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * @author dbrown
+ * @since 10.10
  */
 public class GoogleRenditionProvider implements RenditionProvider {
 

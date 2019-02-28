@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,16 @@
 package org.nuxeo.platform.scanner.dlp.service;
 
 /**
- * Encapsulate result from a virus scan on a Blob
+ * Encapsulate result from a data loss prevention scan
  *
- * @author <a href="mailto:tdelprat@nuxeo.com">Tiry</a>
+ * @since 10.10
  */
 public class ScanFinding {
 
     protected final boolean sensitiveData;
 
     protected final String info;
-    
+
     protected final String type;
 
     protected final String score;
@@ -49,7 +49,7 @@ public class ScanFinding {
     public String getScore() {
         return score;
     }
-    
+
     public String getType() {
         return type;
     }

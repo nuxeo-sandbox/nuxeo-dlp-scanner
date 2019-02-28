@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,9 @@ import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
 /**
- * @author <a href="mailto:tdelprat@nuxeo.com">Tiry</a>
+ * Data loss prevention service component
+ * 
+ * @since 10.10
  */
 public class ScanComponent extends DefaultComponent implements DataLossPreventionScanner {
 

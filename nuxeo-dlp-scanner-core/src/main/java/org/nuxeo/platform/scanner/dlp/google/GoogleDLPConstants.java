@@ -21,7 +21,9 @@ package org.nuxeo.platform.scanner.dlp.google;
 import com.google.privacy.dlp.v2.Likelihood;
 
 /**
- * @author dbrown
+ * Constants used to configure Google DLP service
+ * 
+ * @since 10.10
  */
 public interface GoogleDLPConstants {
 

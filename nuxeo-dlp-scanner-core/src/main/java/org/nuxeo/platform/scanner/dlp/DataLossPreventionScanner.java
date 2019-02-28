@@ -28,6 +28,8 @@ import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 
 /**
  * A service that performs Computer DataLossPreventionScanner tasks like classification, OCR, Face Detection ...
+ * 
+ * @since 10.10
  */
 public interface DataLossPreventionScanner extends DLPScanConstants {
 

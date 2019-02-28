@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2013 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.nuxeo.platform.scanner.dlp.DLPScanConstants;
  * <p/>
  * The Blob xpaths are propagated using a List of String inside the {@link EventContext}.
  *
- * @author <a href="mailto:tdelprat@nuxeo.com">Tiry</a>
+ * @since 10.10
  */
 public class DLPScanEventContext extends DocumentEventContext {
 
