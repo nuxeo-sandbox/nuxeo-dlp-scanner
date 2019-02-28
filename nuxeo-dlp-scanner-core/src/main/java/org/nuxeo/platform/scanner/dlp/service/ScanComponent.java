@@ -79,7 +79,7 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
             ScanProviderDescriptor desc = (ScanProviderDescriptor) contribution;
             try {
                 ScanProvider provider = (ScanProvider) desc.getKlass().getConstructor().newInstance();
-                    providers.put(desc.getProviderName(), provider);
+                providers.put(desc.getProviderName(), provider);
             } catch (ReflectiveOperationException e) {
                 throw new NuxeoException(e);
             }
