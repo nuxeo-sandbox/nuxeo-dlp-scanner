@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
@@ -93,6 +94,8 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
     private List<InfoType> infoTypesList = null;
 
     private List<CustomInfoType> customInfoTypesList = null;
+
+    private GoogleRenditionProvider renditionProvider = new GoogleRenditionProvider();
 
     public GoogleDLPScanProvider() {
         super();
@@ -179,11 +182,6 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
     public boolean checkBlobs(List<Blob> blobs) {
         // TODO Auto-generated method stub
         return true;
-    }
-
-    @Override
-    public List<Blob> redact(List<Blob> blobs, List<String> features) {
-        return blobs.stream().map(b -> redactBlob(b, features)).collect(Collectors.toList());
     }
 
     @Override
@@ -308,11 +306,22 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
         }
     }
 
-    public Blob redactBlob(Blob blob) {
-        return redactBlob(blob, null);
+    @Override
+    public Blob redactBlob(Blob blob, List<String> features) {
+        return renditionProvider.redact(blob, features);
     }
 
-    public Blob redactBlob(Blob blob, List<String> features) {
+    @Override
+    public Blob redactDocument(DocumentModel doc, List<String> features) {
+        return renditionProvider.redact(doc, features);
+    }
+
+    @Override
+    public List<Blob> redact(List<Blob> blobs, List<String> features) {
+        return blobs.stream().map(b -> performRedaction(b, features)).collect(Collectors.toList());
+    }
+
+    protected Blob performRedaction(Blob blob, List<String> features) {
         try (DlpServiceClient dlp = DlpServiceClient.create()) {
             // Specify the project used for request.
             ProjectName project = ProjectName.of(projectId);

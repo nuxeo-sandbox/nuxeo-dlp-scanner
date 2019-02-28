@@ -7,6 +7,7 @@ Bundle-Name: nuxeo-dlp-scanner-core
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.nuxeo.platform.scanner.dlp.core;singleton=true
 Nuxeo-Component: OSGI-INF/core-types-contrib.xml,
+ OSGI-INF/dlp-operation-contrib.xml,
  OSGI-INF/dlp-rendition-contrib.xml,
  OSGI-INF/dlp-service-contrib.xml,
  OSGI-INF/listeners-contrib.xml

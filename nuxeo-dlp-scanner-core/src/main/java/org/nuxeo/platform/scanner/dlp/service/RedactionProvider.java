@@ -21,6 +21,7 @@ package org.nuxeo.platform.scanner.dlp.service;
 import java.util.List;
 
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * Redaction provider interface
@@ -42,5 +43,23 @@ public interface RedactionProvider {
      * @return {@link Blob} objects
      */
     List<Blob> redact(List<Blob> blobs, List<String> features);
+
+    /**
+     * Auto redact a blob input
+     * 
+     * @param blob the blob
+     * @param features the feature to request from the provider
+     * @return {@link Blob} redacted
+     */
+    public Blob redactBlob(Blob blob, List<String> features);
+
+    /**
+     * Auto redact a document input
+     * 
+     * @param blob the blob
+     * @param features the feature to request from the provider
+     * @return {@link Blob} redacted
+     */
+    public Blob redactDocument(DocumentModel doc, List<String> features);
 
 }

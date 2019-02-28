@@ -80,11 +80,12 @@ public class GoogleRenditionProvider implements RenditionProvider {
      */
     @Override
     public List<Blob> render(DocumentModel doc, RenditionDefinition definition) {
+        BlobHolder input = doc.getAdapter(BlobHolder.class);
         Blob output = null;
         if (IMAGE_VARIANT.equals(definition.getVariantPolicy())) {
-            output = redactImage(doc);
+            output = redactImage(input.getBlob(), null);
         } else {
-            output = redactDocument(doc);
+            output = redactDocument(input, null);
         }
         if (output == null) {
             return Collections.emptyList();
@@ -92,8 +93,22 @@ public class GoogleRenditionProvider implements RenditionProvider {
         return Collections.singletonList(output);
     }
 
-    protected Blob redact(Blob blob) {
-        Blob data = dlp().redact(blob);
+    public Blob redact(DocumentModel doc, List<String> features) {
+        BlobHolder input = doc.getAdapter(BlobHolder.class);
+        Blob output = null;
+        if (doc.hasFacet("Picture")) {
+            output = redactImage(input.getBlob(), features);
+        } else {
+            output = redactDocument(input, features);
+        }
+        if (output == null) {
+            return null;
+        }
+        return output;
+    }
+
+    public Blob redact(Blob blob, List<String> features) {
+        Blob data = dlp().redact(blob, features);
         if (data.getMimeType() == null) {
             MimetypeRegistry reg = Framework.getService(MimetypeRegistry.class);
             data.setMimeType(reg.getMimetypeFromBlob(data));
@@ -101,14 +116,13 @@ public class GoogleRenditionProvider implements RenditionProvider {
         return data;
     }
 
-    protected Blob redactImage(DocumentModel doc) {
-        return redact(doc.getAdapter(BlobHolder.class).getBlob());
+    public Blob redactImage(Blob input, List<String> features) {
+        return redact(input, features);
     }
 
-    protected Blob redactDocument(DocumentModel doc) {
+    public Blob redactDocument(BlobHolder input, List<String> features) {
         ConversionService conv = Framework.getService(ConversionService.class);
 
-        BlobHolder input = doc.getAdapter(BlobHolder.class);
         if (!MimetypeRegistry.PDF_MIMETYPE.equals(input.getBlob().getMimeType())) {
             input = conv.convertToMimeType(MimetypeRegistry.PDF_MIMETYPE, input, Collections.emptyMap());
         }
@@ -117,11 +131,11 @@ public class GoogleRenditionProvider implements RenditionProvider {
                 Collections.singletonMap("targetFilePath", "conversion_%04d.png"));
         List<Blob> parts = new ArrayList<>(images.getBlobs().size());
         for (Blob img : images.getBlobs()) {
-            Blob out = redact(img);
+            Blob out = redact(img, features);
             BlobHolder toPdf = conv.convert("image2pdf", new SimpleBlobHolder(out), Collections.emptyMap());
             parts.add(toPdf.getBlob());
         }
-        
+
         // Sort pages (lexographic)
         Collections.sort(parts, new Comparator<Blob>() {
             @Override
