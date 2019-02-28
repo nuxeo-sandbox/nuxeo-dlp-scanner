@@ -35,7 +35,7 @@ public interface DataLossPreventionScanner extends DLPScanConstants {
      * @param blob the data blob
      * @return a {@link ScanResult} object
      */
-    ScanResult execute(Blob blob) throws IOException;
+    ScanResult identify(Blob blob) throws IOException;
 
     /**
      * @param blob the data blob
@@ -43,7 +43,7 @@ public interface DataLossPreventionScanner extends DLPScanConstants {
      * @param maxResults the maximum number of results per feature
      * @return a {@link ScanResult} object
      */
-    ScanResult execute(Blob blob, List<String> features, Integer maxResults) throws IOException;
+    ScanResult identify(Blob blob, List<String> features, Integer maxResults) throws IOException;
 
     /**
      * @param provider the provider to use
@@ -52,7 +52,7 @@ public interface DataLossPreventionScanner extends DLPScanConstants {
      * @param maxResults the maximum number of results per feature
      * @return a {@link ScanResult} object
      */
-    ScanResult execute(String provider, Blob blob, List<String> features, Integer maxResults) throws IOException;
+    ScanResult identify(String provider, Blob blob, List<String> features, Integer maxResults) throws IOException;
 
     /**
      * @param provider the provider to use
@@ -61,7 +61,7 @@ public interface DataLossPreventionScanner extends DLPScanConstants {
      * @param maxResults the maximum number of results per feature
      * @return a list of {@link ScanResult} object
      */
-    List<ScanResult> execute(String provider, List<Blob> blobs, List<String> features, Integer maxResults)
+    List<ScanResult> identify(String provider, List<Blob> blobs, List<String> features, Integer maxResults)
             throws IOException;
 
     /**
@@ -70,7 +70,47 @@ public interface DataLossPreventionScanner extends DLPScanConstants {
      * @param maxResults the maximum number of results per feature
      * @return a list of {@link ScanResult} object
      */
-    List<ScanResult> execute(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException;
+    List<ScanResult> identify(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException;
+
+    /**
+     * @param blob the data blob
+     * @return a {@link Blob} object
+     */
+    Blob redact(Blob blob);
+
+    /**
+     * @param blob the data blob
+     * @param infoTypes the info types to request from the service (optional)
+     * @param maxResults the maximum number of results per feature
+     * @return a {@link Blob} object
+     */
+    Blob redact(Blob blob, List<String> features);
+
+    /**
+     * @param provider the provider to use
+     * @param blob the data blob
+     * @param infoTypes the info types to request from the service (optional)
+     * @param maxResults the maximum number of results per feature
+     * @return a {@link Blob} object
+     */
+    Blob redact(String provider, Blob blob, List<String> features);
+
+    /**
+     * @param provider the provider to use
+     * @param blobs A list of data blobs
+     * @param infoTypes the info types to request from the service (optional)
+     * @param maxResults the maximum number of results per feature
+     * @return a list of {@link Blob} object
+     */
+    List<Blob> redact(String provider, List<Blob> blobs, List<String> features);
+
+    /**
+     * @param blobs A list of data blobs
+     * @param infoTypes the info types to request from the service (optional)
+     * @param maxResults the maximum number of results per feature
+     * @return a list of {@link Blob} object
+     */
+    List<Blob> redact(List<Blob> blobs, List<String> features);
 
     /**
      * @return The name of default provider

@@ -106,7 +106,7 @@ public class DLPScannerProcessor extends AbstractLongRunningListener {
 
             for (String path : blobs.keySet()) {
                 try {
-                    results.put(path, scanService.execute(blobs.get(path)));
+                    results.put(path, scanService.identify(blobs.get(path)));
                     doContinue = true;
                 } catch (Exception e) {
                     log.error("Error calling ScanProvider", e);

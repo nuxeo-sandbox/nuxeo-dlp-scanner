@@ -31,9 +31,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
+import org.nuxeo.platform.scanner.dlp.service.RedactionProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanFinding;
 import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
@@ -59,12 +62,14 @@ import com.google.privacy.dlp.v2.Likelihood;
 import com.google.privacy.dlp.v2.ListInfoTypesRequest;
 import com.google.privacy.dlp.v2.ListInfoTypesResponse;
 import com.google.privacy.dlp.v2.ProjectName;
+import com.google.privacy.dlp.v2.RedactImageRequest;
+import com.google.privacy.dlp.v2.RedactImageResponse;
 import com.google.protobuf.ByteString;
 
 /**
  * @author dbrown
  */
-public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
+public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, GoogleDLPConstants {
 
     protected static final Log log = LogFactory.getLog(GoogleDLPScanProvider.class);
 
@@ -155,6 +160,11 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
         customInfoTypesList = Collections.emptyList();
     }
 
+    @Override
+    public boolean supportsRedaction() {
+        return true;
+    }
+
     /*
      * (non-Javadoc)
      * @see org.nuxeo.platform.scanner.dlp.service.ScanProvider#isEnabled()
@@ -165,16 +175,25 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
     }
 
     @Override
-    public boolean checkBlobs(List<Blob> blobs) throws IOException {
+    public boolean checkBlobs(List<Blob> blobs) {
         // TODO Auto-generated method stub
         return true;
     }
 
     @Override
-    public List<ScanResult> execute(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException {
+    public List<ScanResult> identify(List<Blob> blobs, List<String> features, Integer maxResults) throws IOException {
         List<ScanResult> results = new LinkedList<>();
         for (Blob b : blobs) {
             results.add(scanBlob(b, features, maxResults));
+        }
+        return results;
+    }
+
+    @Override
+    public List<Blob> redact(List<Blob> blobs, List<String> features) {
+        List<Blob> results = new LinkedList<>();
+        for (Blob b : blobs) {
+            results.add(redactBlob(b, features));
         }
         return results;
     }
@@ -297,6 +316,84 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
         }
     }
 
+    public Blob redactBlob(Blob blob) {
+        return redactBlob(blob, null);
+    }
+
+    public Blob redactBlob(Blob blob, List<String> features) {
+        // String projectId = "my-project-id";
+        // String filePath = "path/to/image.png";
+
+        // Initialize client that will be used to send requests. This client only needs to be created
+        // once, and can be reused for multiple requests. After completing all of your requests, call
+        // the "close" method on the client to safely clean up any remaining background resources.
+        try (DlpServiceClient dlp = DlpServiceClient.create()) {
+            // Specify the project used for request.
+            ProjectName project = ProjectName.of(projectId);
+
+            String mimeType = blob.getMimeType();
+            if (mimeType == null) {
+                mimeType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(blob.getFile());
+            }
+
+            ByteContentItem.BytesType bytesType;
+            switch (mimeType) {
+            case "image/jpeg":
+                bytesType = ByteContentItem.BytesType.IMAGE_JPEG;
+                break;
+            case "image/bmp":
+                bytesType = ByteContentItem.BytesType.IMAGE_BMP;
+                break;
+            case "image/png":
+                bytesType = ByteContentItem.BytesType.IMAGE_PNG;
+                break;
+            case "image/svg":
+                bytesType = ByteContentItem.BytesType.IMAGE_SVG;
+                break;
+            default:
+                bytesType = ByteContentItem.BytesType.BYTES_TYPE_UNSPECIFIED;
+                break;
+            }
+
+            // Specify the content to be inspected.
+            ByteString fileBytes = ByteString.readFrom(blob.getStream());
+            ByteContentItem byteItem = ByteContentItem.newBuilder().setType(bytesType).setData(fileBytes).build();
+
+            // Override info types
+            List<InfoType> infoTypes = infoTypesList;
+            if (features != null && !features.isEmpty()) {
+                infoTypes = new LinkedList<>();
+                for (String infoType : features) {
+                    infoTypes.add(InfoType.newBuilder().setName(infoType).build());
+                }
+            }
+
+            InspectConfig config = InspectConfig.newBuilder()
+                                                .addAllInfoTypes(infoTypes)
+                                                .addAllCustomInfoTypes(customInfoTypesList)
+                                                .setMinLikelihood(likelihood)
+                                                .build();
+
+            // Construct the Redact request to be sent by the client.
+            RedactImageRequest request = RedactImageRequest.newBuilder()
+                                                           .setParent(project.toString())
+                                                           .setByteItem(byteItem)
+                                                           .setInspectConfig(config)
+                                                           .build();
+
+            // Use the client to send the API request.
+            RedactImageResponse response = dlp.redactImage(request);
+
+            // Parse the response and process results.
+            Blob redacted = Blobs.createBlob(response.getRedactedImage().newInput());
+            redacted.setFilename("redacted.png");
+            redacted.setMimeType("image/png");
+            return redacted;
+        } catch (Exception e) {
+            throw new NuxeoException("Unable to redact image", e);
+        }
+    }
+
     /**
      * Create a new DLP inspection configuration template.
      *
@@ -313,30 +410,26 @@ public class GoogleDLPScanProvider implements ScanProvider, GoogleDLPConstants {
             FindingLimits findingLimits = FindingLimits.newBuilder().setMaxFindingsPerRequest(maxFindings).build();
 
             // Construct the inspection configuration for the template
-            InspectConfig inspectConfig = InspectConfig.newBuilder()
-                                                       .addAllInfoTypes(infoTypesList)
-                                                       .setMinLikelihood(likelihood)
-                                                       .setLimits(findingLimits)
-                                                       .build();
+            InspectConfig config = InspectConfig.newBuilder()
+                                                .addAllInfoTypes(infoTypesList)
+                                                .setMinLikelihood(likelihood)
+                                                .setLimits(findingLimits)
+                                                .build();
 
-            InspectTemplate inspectTemplate = InspectTemplate.newBuilder()
-                                                             .setInspectConfig(inspectConfig)
-                                                             .setDisplayName(displayName)
-                                                             .setDescription(description)
-                                                             .build();
+            InspectTemplate template = InspectTemplate.newBuilder()
+                                                      .setInspectConfig(config)
+                                                      .setDisplayName(displayName)
+                                                      .setDescription(description)
+                                                      .build();
 
-            CreateInspectTemplateRequest createInspectTemplateRequest = CreateInspectTemplateRequest.newBuilder()
-                                                                                                    .setParent(
-                                                                                                            ProjectName.of(
-                                                                                                                    projectId)
-                                                                                                                       .toString())
-                                                                                                    .setInspectTemplate(
-                                                                                                            inspectTemplate)
-                                                                                                    .setTemplateId(
-                                                                                                            templateId)
-                                                                                                    .build();
+            CreateInspectTemplateRequest request = CreateInspectTemplateRequest.newBuilder()
+                                                                               .setParent(ProjectName.of(projectId)
+                                                                                                     .toString())
+                                                                               .setInspectTemplate(template)
+                                                                               .setTemplateId(templateId)
+                                                                               .build();
 
-            InspectTemplate response = dlpServiceClient.createInspectTemplate(createInspectTemplateRequest);
+            InspectTemplate response = dlpServiceClient.createInspectTemplate(request);
             System.out.printf("Template created: %s", response.getName());
         } catch (Exception e) {
             System.out.printf("Error creating template: %s", e.getMessage());

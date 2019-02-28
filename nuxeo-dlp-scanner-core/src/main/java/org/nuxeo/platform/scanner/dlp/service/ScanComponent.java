@@ -89,30 +89,30 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
     }
 
     @Override
-    public ScanResult execute(Blob blob) throws IOException {
-        return execute(config.getDefaultProviderName(), blob, null, null);
+    public ScanResult identify(Blob blob) throws IOException {
+        return identify(config.getDefaultProviderName(), blob, null, null);
     }
 
     @Override
-    public ScanResult execute(Blob blob, List<String> features, Integer maxResults)
+    public ScanResult identify(Blob blob, List<String> features, Integer maxResults)
             throws IOException, IllegalStateException {
-        return execute(config.getDefaultProviderName(), blob, features, maxResults);
+        return identify(config.getDefaultProviderName(), blob, features, maxResults);
     }
 
     @Override
-    public List<ScanResult> execute(List<Blob> blobs, List<String> features, Integer maxResults)
+    public List<ScanResult> identify(List<Blob> blobs, List<String> features, Integer maxResults)
             throws IOException, IllegalStateException {
-        return execute(config.getDefaultProviderName(), blobs, features, maxResults);
+        return identify(config.getDefaultProviderName(), blobs, features, maxResults);
     }
 
     @Override
-    public ScanResult execute(String providerName, Blob blob, List<String> features, Integer maxResults)
+    public ScanResult identify(String providerName, Blob blob, List<String> features, Integer maxResults)
             throws IOException {
         if (blob == null) {
             throw new IllegalArgumentException("Input Blob cannot be null");
         }
 
-        List<ScanResult> results = execute(providerName, Arrays.asList(blob), features, maxResults);
+        List<ScanResult> results = identify(providerName, Arrays.asList(blob), features, maxResults);
         if (results.size() > 0) {
             return results.get(0);
         } else {
@@ -121,7 +121,7 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
     }
 
     @Override
-    public List<ScanResult> execute(String providerName, List<Blob> blobs, List<String> features, Integer maxResults)
+    public List<ScanResult> identify(String providerName, List<Blob> blobs, List<String> features, Integer maxResults)
             throws IOException {
         ScanProvider provider = providers.get(providerName);
 
@@ -134,7 +134,56 @@ public class ScanComponent extends DefaultComponent implements DataLossPreventio
         } else if (!provider.checkBlobs(blobs)) {
             throw new IllegalArgumentException("Too many blobs or size exceeds the API limit");
         }
-        return provider.execute(blobs, features, maxResults);
+        return provider.identify(blobs, features, maxResults);
+    }
+
+    @Override
+    public Blob redact(Blob blob) {
+        return redact(config.getDefaultProviderName(), blob, null);
+    }
+
+    @Override
+    public Blob redact(Blob blob, List<String> features) {
+        return redact(config.getDefaultProviderName(), blob, features);
+    }
+
+    @Override
+    public List<Blob> redact(List<Blob> blobs, List<String> features) {
+        return redact(config.getDefaultProviderName(), blobs, features);
+    }
+
+    @Override
+    public Blob redact(String provider, Blob blob, List<String> features) {
+        if (blob == null) {
+            throw new IllegalArgumentException("Input Blob cannot be null");
+        }
+
+        List<Blob> results = redact(provider, Arrays.asList(blob), features);
+        if (results.size() > 0) {
+            return results.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Blob> redact(String providerName, List<Blob> blobs, List<String> features) {
+        ScanProvider provider = providers.get(providerName);
+        RedactionProvider redact = null;
+        if (provider.supportsRedaction()) {
+            redact = (RedactionProvider) provider;
+        }
+
+        if (redact == null) {
+            throw new NuxeoException("Unknown provider: " + providerName);
+        }
+
+        if (blobs == null || blobs.size() == 0) {
+            throw new IllegalArgumentException("Input Blob list cannot be null or empty");
+        } else if (!provider.checkBlobs(blobs)) {
+            throw new IllegalArgumentException("Too many blobs or size exceeds the API limit");
+        }
+        return redact.redact(blobs, features);
     }
 
     @Override
