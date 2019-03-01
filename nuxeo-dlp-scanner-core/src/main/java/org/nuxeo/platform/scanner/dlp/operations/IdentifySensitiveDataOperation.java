@@ -19,6 +19,9 @@
 package org.nuxeo.platform.scanner.dlp.operations;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -26,14 +29,19 @@ import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
+import org.nuxeo.ecm.automation.core.collectors.DocumentModelCollector;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.DocumentBlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
+import org.nuxeo.ecm.core.api.model.Property;
+import org.nuxeo.platform.scanner.dlp.DLPScanConstants;
 import org.nuxeo.platform.scanner.dlp.DataLossPreventionScanner;
+import org.nuxeo.platform.scanner.dlp.service.ScanFinding;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 
 /**
@@ -47,6 +55,9 @@ public class IdentifySensitiveDataOperation {
     public static final String ID = "Blob.IdentifySensitiveData";
 
     @Context
+    protected CoreSession session;
+
+    @Context
     protected DataLossPreventionScanner service;
 
     @Param(name = "xpath", required = false, values = { "file:content" })
@@ -58,16 +69,49 @@ public class IdentifySensitiveDataOperation {
     @Param(name = "maxfindings", required = false)
     protected Integer maxFindings;
 
-    @OperationMethod
-    public Blob run(DocumentModel doc) throws IOException {
+    @Param(name = "save", required = false, values = "true")
+    protected boolean save = true;
+
+    @OperationMethod(collector = DocumentModelCollector.class)
+    public DocumentModel run(DocumentModel doc) throws IOException {
         BlobHolder bh = null;
         if (StringUtils.isNotBlank(xpath)) {
             bh = new DocumentBlobHolder(doc, xpath);
         } else {
             bh = doc.getAdapter(BlobHolder.class);
         }
-        ScanResult result = runWorker(bh);
-        return Blobs.createJSONBlobFromValue(result);
+
+        // Get results
+        ScanResult res = runWorker(bh);
+
+        // Update properties
+        Property findingProp = doc.getProperty(DLPScanConstants.DLP_FINDINGS);
+
+        boolean failed = res.isError();
+        boolean sensitive = res.hasSensitiveData();
+
+        if (res.getFindings() != null) {
+            findingProp.remove();
+            for (ScanFinding f : res.getFindings()) {
+                Map<String, String> fmap = new HashMap<>();
+                fmap.put("info", f.getInfo());
+                fmap.put("score", f.getScore());
+                fmap.put("type", f.getType());
+                findingProp.addValue(fmap);
+            }
+        }
+
+        doc.setPropertyValue(DLPScanConstants.DLP_SENSITIVE_DATA, sensitive);
+        doc.setPropertyValue(DLPScanConstants.DLP_DATE_PROP, new Date());
+
+        doc.setPropertyValue(DLPScanConstants.DLP_STATUS_PROP,
+                failed ? DLPScanConstants.DLP_STATUS_FAILED : DLPScanConstants.DLP_STATUS_DONE);
+
+        if (save) {
+            doc = session.saveDocument(doc);
+        }
+
+        return doc;
     }
 
     @OperationMethod
