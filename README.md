@@ -30,7 +30,10 @@ The service role should be assigned at least the `DLP User` role.  The Scanner s
 ### Google DLP Scanner Default Properties
 
 ```
-# Stop checks by setting this to false
+# Stop listener from processing events
+dlp.scan.enabled=(true)|false
+
+# Stop Google checks by setting this to false
 google.dlp.enabled=(true)|false
 
 # List of Info Types to use

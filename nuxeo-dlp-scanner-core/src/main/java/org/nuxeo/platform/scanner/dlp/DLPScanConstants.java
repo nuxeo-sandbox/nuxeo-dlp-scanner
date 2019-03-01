@@ -27,6 +27,8 @@ package org.nuxeo.platform.scanner.dlp;
  */
 public interface DLPScanConstants {
 
+    public String DLP_SCAN_ENABLED = "dlp.scan.enabled";
+
     public String DLP_SCAN_NEEDED_EVENT = "dlpScanNeeded";
 
     public String DLP_SENSITIVE_DATA_EVENT = "dlpSensitiveDataFound";

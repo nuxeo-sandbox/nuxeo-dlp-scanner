@@ -51,10 +51,18 @@ public class DLPScanSyncListener implements EventListener {
 
     protected static final Log log = LogFactory.getLog(DLPScanSyncListener.class);
 
+    Boolean enabled;
+
+    private boolean isEnabled() {
+        if (enabled == null) {
+            enabled = Boolean.parseBoolean(Framework.getProperty(DLPScanConstants.DLP_SCAN_ENABLED, "true"));
+        }
+        return enabled;
+    }
+
     @Override
     public void handleEvent(Event event) {
-
-        if (event.getContext() instanceof DocumentEventContext) {
+        if (isEnabled() && event.getContext() instanceof DocumentEventContext) {
             DocumentEventContext docCtx = (DocumentEventContext) event.getContext();
             DocumentModel targetDoc = docCtx.getSourceDocument();
 
