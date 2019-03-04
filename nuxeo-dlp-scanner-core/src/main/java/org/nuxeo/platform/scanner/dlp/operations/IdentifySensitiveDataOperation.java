@@ -81,6 +81,11 @@ public class IdentifySensitiveDataOperation {
             bh = doc.getAdapter(BlobHolder.class);
         }
 
+        // Add facet
+        if (!doc.hasFacet(DLPScanConstants.DLP_FACET)) {
+            doc.addFacet(DLPScanConstants.DLP_FACET);
+        }
+
         // Get results
         ScanResult res = runWorker(bh);
 
