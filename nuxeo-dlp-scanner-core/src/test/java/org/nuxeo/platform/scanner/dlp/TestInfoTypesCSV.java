@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -47,7 +48,7 @@ import com.google.privacy.dlp.v2.InfoTypeDescription;
 @Features(CoreFeature.class)
 @Deploy("org.nuxeo.ecm.core.test")
 @Deploy("org.nuxeo.platform.scanner.dlp.core")
-//@Ignore
+@Ignore
 public class TestInfoTypesCSV {
 
     @Inject
