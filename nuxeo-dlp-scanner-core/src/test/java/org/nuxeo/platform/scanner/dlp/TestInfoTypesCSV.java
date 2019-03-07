@@ -18,13 +18,15 @@
  */
 package org.nuxeo.platform.scanner.dlp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -45,7 +47,7 @@ import com.google.privacy.dlp.v2.InfoTypeDescription;
 @Features(CoreFeature.class)
 @Deploy("org.nuxeo.ecm.core.test")
 @Deploy("org.nuxeo.platform.scanner.dlp.core")
-@Ignore
+//@Ignore
 public class TestInfoTypesCSV {
 
     @Inject
@@ -64,7 +66,15 @@ public class TestInfoTypesCSV {
         GoogleDLPScanProvider prov = (GoogleDLPScanProvider) scanner.getProvider("google");
 
         List<InfoTypeDescription> list = prov.getInfoTypes(null, null);
+        list = new ArrayList<InfoTypeDescription>(list);
+        Collections.sort(list, new Comparator<InfoTypeDescription>() {
 
+            @Override
+            public int compare(InfoTypeDescription o1, InfoTypeDescription o2) {
+                return o1.getDisplayName().compareTo(o2.getDisplayName());
+            }
+
+        });
         System.out.println("id,label,obsolete");
         for (InfoTypeDescription it : list) {
             System.out.printf("\"%s\",\"%s\",0\n", it.getName(), it.getDisplayName());

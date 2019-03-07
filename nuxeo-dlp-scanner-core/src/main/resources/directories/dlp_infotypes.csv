@@ -1,30 +1,45 @@
 id,label,obsolete
+"ALL_BASIC","All basic identifier attributes",0
+"AGE","Age of an individual",0
 "AMERICAN_BANKERS_CUSIP_ID","American Bankers CUSIP identifier",0
+"ARGENTINA_DNI_NUMBER","Argentina identity card number",0
 "AUSTRALIA_MEDICARE_NUMBER","Australia medicare number",0
 "AUSTRALIA_TAX_FILE_NUMBER","Australia tax file number",0
+"IBAN_CODE","Bank IBAN number",0
+"SWIFT_CODE","Bank SWIFT routing number",0
 "BRAZIL_CPF_NUMBER","Brazil individual taxpayer identification number",0
 "CANADA_BC_PHN","British Columbia public health network number",0
 "CANADA_DRIVERS_LICENSE_NUMBER","Canada driver's license number",0
-"CANADA_OHIP","Ontario health insurance number",0
 "CANADA_PASSPORT","Canada passport number",0
-"CANADA_QUEBEC_HIN","Quebec health insurance number",0
 "CANADA_SOCIAL_INSURANCE_NUMBER","Canada social insurance number",0
+"CHILE_CDI_NUMBER","Chile identity card number",0
 "CHINA_PASSPORT","China passport number",0
+"CHINA_RESIDENT_ID_NUMBER","China resident number",0
+"COLOMBIA_CDC_NUMBER","Colombia identity card number",0
 "CREDIT_CARD_NUMBER","Credit card number",0
+"DATE_OF_BIRTH","Date of birth",0
+"DATE","Date or time",0
+"DENMARK_CPR_NUMBER","Denmark CPR number",0
+"DOMAIN_NAME","Domain name",0
 "EMAIL_ADDRESS","Email address",0
 "ETHNIC_GROUP","Ethnic Group",0
 "FEMALE_NAME","Female name",0
+"FINLAND_NATIONAL_ID_NUMBER","Finland personal identity code",0
 "FIRST_NAME","First name",0
 "FRANCE_CNI","France national identity card number",0
 "FRANCE_NIR","France national insurance number",0
 "FRANCE_PASSPORT","France passport number",0
-"GCP_CREDENTIALS","Google Cloud Platform service account credentials",0
+"GENDER","Gender",0
 "GERMANY_PASSPORT","Germany passport number",0
-"IBAN_CODE","Bank IBAN number",0
-"IMEI_HARDWARE_ID","Phone IMEI number",0
-"INDIA_PAN_INDIVIDUAL","India permanent account number",0
+"GCP_CREDENTIALS","Google Cloud Platform service account credentials",0
+"TIME","Human readable time (e.g. 9:54 pm)",0
+"ICD10_CODE","ICD10 description match (International Statistical Classification of Diseases and Related Health Problems.)",0
+"ICD9_CODE","ICD9 description match (International Statistical Classification of Diseases and Related Health Problems.)",0
 "IP_ADDRESS","IP address",0
-"JAPAN_INDIVIDUAL_NUMBER","Japan individual number or 'My Number'",0
+"INDIA_PAN_INDIVIDUAL","India permanent account number",0
+"JAPAN_BANK_ACCOUNT","Japan bank account number",0
+"JAPAN_DRIVERS_LICENSE_NUMBER","Japan driver's license number",0
+"JAPAN_INDIVIDUAL_NUMBER","Japan individual number or "My Number"",0
 "JAPAN_PASSPORT","Japan passport number",0
 "KOREA_PASSPORT","Korea passport number",0
 "KOREA_RRN","Korea resident registration number",0
@@ -32,62 +47,48 @@ id,label,obsolete
 "MAC_ADDRESS_LOCAL","Local MAC address",0
 "MAC_ADDRESS","MAC address",0
 "MALE_NAME","Male name",0
-"MEXICO_CURP_NUMBER","Mexico population registry number",0
+"FDA_CODE","Medical drug names",0
 "MEXICO_PASSPORT","Mexico passport number",0
+"MEXICO_CURP_NUMBER","Mexico population registry number",0
 "NETHERLANDS_BSN_NUMBER","Netherlands citizen service number",0
+"NETHERLANDS_PASSPORT","Netherlands passport number",0
 "NORWAY_NI_NUMBER","Norway national identity number",0
+"CANADA_OHIP","Ontario health insurance number",0
+"PARAGUAY_CIC_NUMBER","Paraguay identity card number",0
+"PERSON_NAME","Person name",0
+"PERU_DNI_NUMBER","Peru identity card number",0
+"IMEI_HARDWARE_ID","Phone IMEI number",0
 "PHONE_NUMBER","Phone number",0
+"POLAND_PESEL_NUMBER","Poland PESEL number",0
+"POLAND_NATIONAL_ID_NUMBER","Poland national id number",0
+"POLAND_PASSPORT","Poland passport",0
+"PORTUGAL_CDC_NUMBER","Portugal identity card number",0
+"CANADA_QUEBEC_HIN","Quebec health insurance number",0
+"SPAIN_DRIVERS_LICENSE_NUMBER","Spain driver's license number",0
 "SPAIN_NIE_NUMBER","Spain foreigner tax identification number",0
-"SPAIN_NIF_NUMBER","Spain tax identification number",0
 "SPAIN_PASSPORT","Spain passport number",0
-"SWIFT_CODE","Bank SWIFT routing number",0
+"SPAIN_NIF_NUMBER","Spain tax identification number",0
+"LOCATION","Street addresses and landmarks",0
+"SWEDEN_PASSPORT","Sweden passport number",0
+"SWEDEN_NATIONAL_ID_NUMBER","Sweden personal identity number",0
+"URL","URL",0
+"US_ADOPTION_TAXPAYER_IDENTIFICATION_NUMBER","USA Adoption Taxpayer Identification Number",0
+"US_DEA_NUMBER","USA DEA number",0
+"US_EMPLOYER_IDENTIFICATION_NUMBER","USA Employer Identification Number",0
+"US_INDIVIDUAL_TAXPAYER_IDENTIFICATION_NUMBER","USA Individual Taxpayer Identification Number",0
+"US_PREPARER_TAXPAYER_IDENTIFICATION_NUMBER","USA Preparer Taxpayer Identification Number",0
+"US_BANK_ROUTING_MICR","USA bank routing number",0
+"US_DRIVERS_LICENSE_NUMBER","USA drivers license number",0
+"US_HEALTHCARE_NPI","USA healthcare national provider identifier",0
+"US_PASSPORT","USA passport number",0
+"US_SOCIAL_SECURITY_NUMBER","USA social security number",0
+"US_STATE","USA state name",0
+"US_TOLLFREE_PHONE_NUMBER","USA toll free phone number",0
+"US_VEHICLE_IDENTIFICATION_NUMBER","USA vehicle identification number",0
 "UK_DRIVERS_LICENSE_NUMBER","United Kingdom drivers license number",0
 "UK_NATIONAL_HEALTH_SERVICE_NUMBER","United Kingdom national health service number",0
 "UK_NATIONAL_INSURANCE_NUMBER","United Kingdom national insurance number",0
 "UK_PASSPORT","United Kingdom passport number",0
 "UK_TAXPAYER_REFERENCE","United Kingdom taxpayer reference number",0
-"US_ADOPTION_TAXPAYER_IDENTIFICATION_NUMBER","USA Adoption Taxpayer Identification Number",0
-"US_BANK_ROUTING_MICR","USA bank routing number",0
-"US_DEA_NUMBER","USA DEA number",0
-"US_DRIVERS_LICENSE_NUMBER","USA drivers license number",0
-"US_HEALTHCARE_NPI","USA healthcare national provider identifier",0
-"US_INDIVIDUAL_TAXPAYER_IDENTIFICATION_NUMBER","USA Individual Taxpayer Identification Number",0
-"US_PASSPORT","USA passport number",0
-"US_PREPARER_TAXPAYER_IDENTIFICATION_NUMBER","USA Preparer Taxpayer Identification Number",0
-"US_SOCIAL_SECURITY_NUMBER","USA social security number",0
-"US_TOLLFREE_PHONE_NUMBER","USA toll free phone number",0
-"US_VEHICLE_IDENTIFICATION_NUMBER","USA vehicle identification number",0
-"US_STATE","USA state name",0
-"FDA_CODE","Medical drug names",0
-"ICD9_CODE","ICD9 description match (International Statistical Classification of Diseases and Related Health Problems.)",0
-"ICD10_CODE","ICD10 description match (International Statistical Classification of Diseases and Related Health Problems.)",0
-"US_EMPLOYER_IDENTIFICATION_NUMBER","USA Employer Identification Number",0
-"LOCATION","Street addresses and landmarks",0
-"DATE","Date or time",0
-"DATE_OF_BIRTH","Date of birth",0
-"TIME","Human readable time (e.g. 9:54 pm)",0
-"PERSON_NAME","Person name",0
-"AGE","Age of an individual",0
-"GENDER","Gender",0
-"ARGENTINA_DNI_NUMBER","Argentina identity card number",0
-"CHILE_CDI_NUMBER","Chile identity card number",0
-"COLOMBIA_CDC_NUMBER","Colombia identity card number",0
-"NETHERLANDS_PASSPORT","Netherlands passport number",0
-"PARAGUAY_CIC_NUMBER","Paraguay identity card number",0
-"PERU_DNI_NUMBER","Peru identity card number",0
-"PORTUGAL_CDC_NUMBER","Portugal identity card number",0
 "URUGUAY_CDI_NUMBER","Uruguay identity card number",0
 "VENEZUELA_CDI_NUMBER","Venezuela identity card number",0
-"DOMAIN_NAME","Domain name",0
-"CHINA_RESIDENT_ID_NUMBER","China resident number",0
-"POLAND_PESEL_NUMBER","Poland PESEL number",0
-"POLAND_NATIONAL_ID_NUMBER","Poland national id number",0
-"POLAND_PASSPORT","Poland passport",0
-"SWEDEN_PASSPORT","Sweden passport number",0
-"SWEDEN_NATIONAL_ID_NUMBER","Sweden personal identity number",0
-"FINLAND_NATIONAL_ID_NUMBER","Finland personal identity code",0
-"JAPAN_BANK_ACCOUNT","Japan bank account number",0
-"JAPAN_DRIVERS_LICENSE_NUMBER","Japan driver's license number",0
-"SPAIN_DRIVERS_LICENSE_NUMBER","Spain driver's license number",0
-"URL","URL",0
-"DENMARK_CPR_NUMBER","Denmark CPR number",0
