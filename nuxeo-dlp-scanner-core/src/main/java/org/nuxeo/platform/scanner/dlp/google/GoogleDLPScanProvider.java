@@ -37,6 +37,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
+import org.nuxeo.ecm.core.convert.api.ConversionException;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.platform.scanner.dlp.service.RedactionProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanFinding;
@@ -226,10 +227,15 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
 
             if (convertToText
                     && (mimeType == null || (!mimeType.startsWith("text") && !mimeType.startsWith("image")))) {
-                ConversionService conv = Framework.getService(ConversionService.class);
-                BlobHolder text = conv.convertToMimeType("text/plain", new SimpleBlobHolder(blob),
-                        Collections.emptyMap());
-                blob = text.getBlob();
+                try {
+                    ConversionService conv = Framework.getService(ConversionService.class);
+                    BlobHolder text = conv.convertToMimeType("text/plain", new SimpleBlobHolder(blob),
+                            Collections.emptyMap());
+                    blob = text.getBlob();
+                } catch (ConversionException cex) {
+                    log.warn("Unable to scan for DLP: " + cex.getMessage());
+                    return ScanResult.makeFailed();
+                }
             }
 
             ByteContentItem.BytesType bytesType;
