@@ -1,7 +1,7 @@
 <package type="addon" name="nuxeo-data-loss-prevention-scanner" version="@VERSION@">
   <title>Nuxeo Data Loss Prevention Scanner</title>
   <description>
-    <p>Integration with Google data Loss Prevention</p>
+    <p>This addon enables integration with Google Data Loss Prevention. This functionality requires a separately licensed account and subscription with GCP.</p>
   </description>
   <home-page>https://github.com/nuxeo-sandbox/nuxeo-dlp-scanner</home-page>
   <vendor>Nuxeo</vendor>
