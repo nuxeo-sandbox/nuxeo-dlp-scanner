@@ -27,8 +27,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.util.PDFMergerUtility;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -150,12 +149,12 @@ public class GoogleRenditionProvider implements RenditionProvider {
                 ut.addSource(blob.getStream());
             }
             return appendPDFs(ut, input.getBlob().getFilename());
-        } catch (IOException | COSVisitorException iox) {
+        } catch (IOException iox) {
             throw new NuxeoException(iox);
         }
     }
 
-    protected Blob appendPDFs(PDFMergerUtility ut, String filename) throws IOException, COSVisitorException {
+    protected Blob appendPDFs(PDFMergerUtility ut, String filename) throws IOException {
         File tempFile = Framework.createTempFile("redacted_" + filename, ".pdf");
         ut.setDestinationFileName(tempFile.getAbsolutePath());
         ut.mergeDocuments();
