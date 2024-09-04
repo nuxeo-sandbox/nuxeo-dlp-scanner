@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
@@ -46,7 +46,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class GoogleRenditionProvider implements RenditionProvider {
 
-    protected static final Log log = LogFactory.getLog(GoogleRenditionProvider.class);
+    protected static final Logger log = LogManager.getLogger(GoogleRenditionProvider.class);
 
     static final String IMAGE_VARIANT = "image";
 

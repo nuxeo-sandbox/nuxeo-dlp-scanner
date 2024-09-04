@@ -28,9 +28,10 @@ import java.util.stream.Collectors;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import com.google.cloud.ServiceOptions;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -45,7 +46,6 @@ import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 import org.nuxeo.runtime.api.Framework;
 
-import com.google.cloud.ServiceOptions;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.cloud.dlp.v2.DlpServiceSettings;
 import com.google.privacy.dlp.v2.ByteContentItem;
@@ -74,7 +74,7 @@ import com.google.protobuf.ByteString;
  */
 public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, GoogleDLPConstants {
 
-    protected static final Log log = LogFactory.getLog(GoogleDLPScanProvider.class);
+    protected static final Logger log = LogManager.getLogger(GoogleDLPScanProvider.class);
 
     Likelihood likelihood = Likelihood.LIKELY;
 

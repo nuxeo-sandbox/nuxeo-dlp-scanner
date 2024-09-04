@@ -1,7 +1,4 @@
 # Nuxeo Data Loss Prevention Scanner
-
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Sandbox/sandbox_nuxeo-dlp-scanner-master)](https://qa.nuxeo.org/jenkins/view/Sandbox/job/Sandbox/job/sandbox_nuxeo-dlp-scanner-master/)
-
 Framework for scanning all content for Data Loss Prevention.  Pattern and confidence matching will identify potential sources of sensitive data in your repository.
 
 ## Dependencies

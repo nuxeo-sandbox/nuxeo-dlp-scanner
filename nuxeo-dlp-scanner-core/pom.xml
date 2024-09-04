@@ -5,10 +5,22 @@
   <parent>
     <groupId>org.nuxeo.platform.scanner.dlp</groupId>
     <artifactId>nuxeo-dlp-scanner-parent</artifactId>
-    <version>11.4-SNAPSHOT</version>
+    <version>2023.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>nuxeo-dlp-scanner-core</artifactId>
   <name>Nuxeo Data Loss Prevention Scanner :: Core</name>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>libraries-bom</artifactId>
+        <version>26.44.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -24,22 +36,26 @@
     <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
       <artifactId>nuxeo-automation-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-rendition-api</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Google Cloud Dependencies -->
     <dependency>
       <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-dlp</artifactId>
-      <version>0.70.0-beta</version>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-pubsub</artifactId>
-      <version>1.52.0</version>
     </dependency>
   </dependencies>
 </project>

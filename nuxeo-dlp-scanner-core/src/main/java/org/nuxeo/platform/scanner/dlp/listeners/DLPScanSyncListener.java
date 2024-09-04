@@ -23,8 +23,8 @@ package org.nuxeo.platform.scanner.dlp.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.Property;
@@ -49,7 +49,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class DLPScanSyncListener implements EventListener {
 
-    protected static final Log log = LogFactory.getLog(DLPScanSyncListener.class);
+    protected static final Logger log = LogManager.getLogger(DLPScanSyncListener.class);
 
     Boolean enabled;
 

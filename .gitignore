@@ -31,3 +31,5 @@ bin/
 *-bak
 *.bak
 *.versionsBackup
+.env
+google-credential.json
