@@ -14,9 +14,10 @@
   <!-- Production State: production_ready | testing | proto -->
   <production-state>testing</production-state>
   <supported>false</supported>
-  <platforms>
-    <platform>lts-@NUXEO_TARGET_VERSION@</platform>
-  </platforms>
+  <target-platform>
+    <name>lts</name>
+    <version>[2023.0,@DISTRIB_VERSION@]</version>
+  </target-platform>
   <license>Apache License, Version 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
   <!-- Visibility: PRIVATE | MARKETPLACE | DEV | PUBLIC -->

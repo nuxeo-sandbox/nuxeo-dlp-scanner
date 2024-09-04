@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.nuxeo</groupId>
     <artifactId>nuxeo-parent</artifactId>
-    <version>2023.16</version>
+    <version>2023.6</version>
   </parent>
 
   <groupId>org.nuxeo.platform.scanner.dlp</groupId>
@@ -15,7 +15,7 @@
 
   <properties>
     <nuxeo.skip.enforcer>true</nuxeo.skip.enforcer>
-    <nuxeo.target.version>2023.*</nuxeo.target.version>
+    <nuxeo.target.version>2023.6</nuxeo.target.version>
     <skipDocker>false</skipDocker>
   </properties>
 
@@ -101,15 +101,5 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.spotify</groupId>
-          <artifactId>dockerfile-maven-plugin</artifactId>
-          <version>1.4.13</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+
 </project>
