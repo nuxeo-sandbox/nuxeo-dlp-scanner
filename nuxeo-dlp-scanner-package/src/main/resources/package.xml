@@ -16,7 +16,7 @@
   <supported>false</supported>
   <target-platform>
     <name>lts</name>
-    <version>[2023.7.0,)</version>
+    <version>[@DISTRIB_VERSION@,)</version>
   </target-platform>
   <license>Apache License, Version 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
