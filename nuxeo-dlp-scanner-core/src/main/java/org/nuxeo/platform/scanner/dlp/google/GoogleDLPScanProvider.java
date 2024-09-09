@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.google.cloud.ServiceOptions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -46,13 +49,16 @@ import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 import org.nuxeo.runtime.api.Framework;
 
+import com.google.privacy.dlp.v2.BoundingBox;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.cloud.dlp.v2.DlpServiceSettings;
 import com.google.privacy.dlp.v2.ByteContentItem;
 import com.google.privacy.dlp.v2.ContentItem;
+import com.google.privacy.dlp.v2.ContentLocation;
 import com.google.privacy.dlp.v2.CreateInspectTemplateRequest;
 import com.google.privacy.dlp.v2.CustomInfoType;
 import com.google.privacy.dlp.v2.Finding;
+import com.google.privacy.dlp.v2.ImageLocation;
 import com.google.privacy.dlp.v2.InfoType;
 import com.google.privacy.dlp.v2.InfoTypeDescription;
 import com.google.privacy.dlp.v2.InspectConfig;
@@ -64,10 +70,12 @@ import com.google.privacy.dlp.v2.InspectTemplate;
 import com.google.privacy.dlp.v2.Likelihood;
 import com.google.privacy.dlp.v2.ListInfoTypesRequest;
 import com.google.privacy.dlp.v2.ListInfoTypesResponse;
+import com.google.privacy.dlp.v2.Location;
 import com.google.privacy.dlp.v2.ProjectName;
 import com.google.privacy.dlp.v2.RedactImageRequest;
 import com.google.privacy.dlp.v2.RedactImageResponse;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 
 /**
  * @since 10.10
@@ -300,10 +308,62 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                     if (includeQuote) {
                         quote = finding.getQuote();
                     }
+
                     String type = finding.getInfoType().getName();
                     Likelihood score = finding.getLikelihood();
                     boolean sensitive = score.ordinal() >= sensitivity.ordinal();
-                    findings.add(new ScanFinding(sensitive, score.toString(), type, quote));
+                    
+                    // ==================== Handle location
+                    Location location = finding.getLocation();
+
+                    JSONObject locationJson = new JSONObject();
+                    locationJson.put("hasByteRange", location.hasByteRange());
+                    locationJson.put("hasCodepointRange", location.hasCodepointRange());
+                    int contentLocationCount = location.getContentLocationsCount();
+                    JSONArray locations = new JSONArray();
+                    // Maybe we should get only first location?
+                    boolean firstImageLocHandled = false;
+                    for (int iLoc = 0; iLoc < contentLocationCount; iLoc++) {
+                        ContentLocation contentLocation = location.getContentLocations(iLoc);
+                        if (contentLocation.hasImageLocation()) {
+                            ImageLocation imageLocation = contentLocation.getImageLocation();
+                            if (imageLocation.getBoundingBoxesCount() > 0) {
+                                JSONObject oneLoc = new JSONObject();
+                                // Just get first one
+                                BoundingBox bb = imageLocation.getBoundingBoxes(0);
+                                oneLoc.put("top", bb.getTop());
+                                oneLoc.put("left", bb.getLeft());
+                                oneLoc.put("width", bb.getWidth());
+                                oneLoc.put("height", bb.getHeight());
+                                locations.put(oneLoc);
+                                
+                                if(!firstImageLocHandled) {
+                                    locationJson.put("firstImageLocation", oneLoc);
+                                    firstImageLocHandled = true;
+                                }
+                                
+                            }
+                        }
+                    }
+                    locationJson.put("imageLocations", locations);
+                    locationJson.put("hasImageLocation", locations.length() > 0);
+                    
+                    if(location.hasByteRange()) {
+                        JSONObject byteRange = new JSONObject();
+                        byteRange.put("start", location.getByteRange().getStart());
+                        byteRange.put("end", location.getByteRange().getEnd());
+                        locationJson.put("byteRange", byteRange);
+                    }
+                    
+                    if(location.hasCodepointRange()) {
+                        JSONObject codePointRange = new JSONObject();
+                        codePointRange.put("start", location.getCodepointRange().getStart());
+                        codePointRange.put("end", location.getCodepointRange().getEnd());
+                        locationJson.put("codePointRange", codePointRange);
+                    }
+                    // ==================== /Handle location
+                    
+                    findings.add(new ScanFinding(sensitive, score.toString(), type, quote, locationJson.toString()));
                 }
 
             }

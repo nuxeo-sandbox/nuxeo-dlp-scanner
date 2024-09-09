@@ -43,6 +43,7 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.TransactionalFeature;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
 /**
@@ -62,6 +63,9 @@ public class TestDataLossPreventionScanner {
 
     @Inject
     protected EventService eventService;
+
+    @Inject
+    protected TransactionalFeature transactionalFeature;
 
     @Inject
     WorkManager workManager;
@@ -191,31 +195,47 @@ public class TestDataLossPreventionScanner {
     }
 
     @Test
+    public void testJpeg() throws Exception {
+        runFile("ssn.jpg", "image/jpeg");
+    }
+
+    @Test
     public void testCsv() throws Exception {
         runFile("ssn.tsv", "text/tsv");
     }
 
     private void runFile(String data, String mime) throws Exception {
+        
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
 
         DocumentModel file;
 
-        try {
-            file = session.createDocumentModel("/", data, "File");
-            file.setPropertyValue("file:content", (Serializable) getBlob(data, mime));
-            file = session.createDocument(file);
-        } finally {
-            TransactionHelper.commitOrRollbackTransaction();
-        }
-
-        TransactionHelper.startTransaction();
+        file = session.createDocumentModel("/", data, "File");
+        file.setPropertyValue("file:content", (Serializable) getBlob(data, mime));
+        file = session.createDocument(file);
 
         // wait for processing to be done
-        workManager.awaitCompletion(10, TimeUnit.SECONDS);
+        //workManager.awaitCompletion(10, TimeUnit.SECONDS);
+        transactionalFeature.nextTransaction();
 
         file = session.getDocument(file.getRef());
 
         Assert.assertTrue(file.hasFacet(DLPScanConstants.DLP_FACET));
         Assert.assertTrue((Boolean) file.getPropertyValue(DLPScanConstants.DLP_SENSITIVE_DATA));
         Assert.assertEquals(DLPScanConstants.DLP_STATUS_DONE, file.getPropertyValue(DLPScanConstants.DLP_STATUS_PROP));
+        System.out.println("++++++++++++++++++++++++++++++++==");
+        System.out.println("++++++++++++++++++++++++++++++++==");
+        System.out.println("++++++++++++++++++++++++++++++++==");
+        List<Map<String, Serializable>> findings = (List<Map<String, Serializable>>) file.getPropertyValue(DLPScanConstants.DLP_FINDINGS);
+        for(Map<String, Serializable> map : findings) {
+            System.out.println("==============================");
+            System.out.println(map.get("info"));
+            System.out.println(map.get("score"));
+            System.out.println(map.get("type"));
+            System.out.println(map.get("locationJson"));
+        }
     }
 }

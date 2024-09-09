@@ -19,6 +19,7 @@
       <xs:element name="info" type="xs:string"/>
       <xs:element name="type" type="xs:string"/>
       <xs:element name="score" type="xs:string" default="VERY_UNLIKELY"/>
+      <xs:element name="locationJson" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 

@@ -34,12 +34,15 @@ public class ScanFinding {
     protected final String type;
 
     protected final String score;
+    
+    protected final String locationJsonStr;
 
-    public ScanFinding(boolean sensitiveData, String score, String type, String info) {
+    public ScanFinding(boolean sensitiveData, String score, String type, String info, String locationJsonStr) {
         this.sensitiveData = sensitiveData;
         this.score = score;
         this.type = type;
         this.info = info;
+        this.locationJsonStr = locationJsonStr;
     }
 
     public boolean hasSensitiveData() {
@@ -56,6 +59,10 @@ public class ScanFinding {
 
     public String getInfo() {
         return info;
+    }
+    
+    public String getLocationJsonStr() {
+        return locationJsonStr;
     }
 
 }

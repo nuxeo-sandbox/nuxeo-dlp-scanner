@@ -16,7 +16,7 @@
   <properties>
     <nuxeo.skip.enforcer>true</nuxeo.skip.enforcer>
     <nuxeo.target.version>2023.*</nuxeo.target.version>
-    <skipDocker>false</skipDocker>
+    <skipDocker>true</skipDocker>
   </properties>
 
   <modules>

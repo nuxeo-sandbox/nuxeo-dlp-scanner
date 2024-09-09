@@ -102,6 +102,7 @@ public class IdentifySensitiveDataOperation {
                 fmap.put("info", f.getInfo());
                 fmap.put("score", f.getScore());
                 fmap.put("type", f.getType());
+                fmap.put("locationJson", f.getLocationJsonStr());
                 findingProp.addValue(fmap);
             }
         }
