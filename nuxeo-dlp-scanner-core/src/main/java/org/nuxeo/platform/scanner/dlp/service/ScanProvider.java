@@ -48,6 +48,14 @@ public interface ScanProvider {
     boolean supportsRedaction();
 
     /**
+     * Next time identify() is called, convertToText will use the value passed, then return to value read in the
+     * configuration
+     * 
+     * @param value
+     */
+    void setNextIdentifyConvertToTextValue(boolean value);
+
+    /**
      * @param blobs the blobs to pass to the API
      * @param features the feature to request from the provider
      * @param maxResults the maximum number of results per feature

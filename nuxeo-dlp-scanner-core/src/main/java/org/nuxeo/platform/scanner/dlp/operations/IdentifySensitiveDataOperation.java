@@ -42,6 +42,7 @@ import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.platform.scanner.dlp.DLPScanConstants;
 import org.nuxeo.platform.scanner.dlp.DataLossPreventionScanner;
 import org.nuxeo.platform.scanner.dlp.service.ScanFinding;
+import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 
 /**
@@ -68,6 +69,10 @@ public class IdentifySensitiveDataOperation {
 
     @Param(name = "maxfindings", required = false)
     protected Integer maxFindings;
+    
+    // "default", true", false"
+    @Param(name = "convertToText", required = false)
+    protected String convertToText = "default";
 
     @Param(name = "save", required = false, values = "true")
     protected boolean save = true;
@@ -127,6 +132,12 @@ public class IdentifySensitiveDataOperation {
     }
 
     protected ScanResult identify(BlobHolder bh) throws IOException {
+        
+        if(convertToText != null && !"default".equals(convertToText)) {
+            ScanProvider provider = service.getProvider(service.getDefaultProvider());
+            provider.setNextIdentifyConvertToTextValue("true".equals(convertToText));
+        }
+        
         return service.identify(bh.getBlob(), infoTypes, maxFindings);
     }
 

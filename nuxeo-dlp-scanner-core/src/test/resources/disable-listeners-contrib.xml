@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="nuxeo.dlp.scanner.test.listeners">
+
+  <require>org.nuxeo.ecm.dlp.listeners</require>
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="dlpListener" async="false" postCommit="false"
+      class="org.nuxeo.platform.scanner.dlp.listeners.DLPScanSyncListener" priority="100" enabled="false">
+      <event>documentCreated</event>
+      <event>beforeDocumentModification</event>
+      <event>aboutToCreate</event>
+    </listener>
+  </extension>
+
+</component>

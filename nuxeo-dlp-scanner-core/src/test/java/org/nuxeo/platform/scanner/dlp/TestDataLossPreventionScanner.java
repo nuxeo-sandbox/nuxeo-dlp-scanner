@@ -226,6 +226,7 @@ public class TestDataLossPreventionScanner {
         Assert.assertTrue(file.hasFacet(DLPScanConstants.DLP_FACET));
         Assert.assertTrue((Boolean) file.getPropertyValue(DLPScanConstants.DLP_SENSITIVE_DATA));
         Assert.assertEquals(DLPScanConstants.DLP_STATUS_DONE, file.getPropertyValue(DLPScanConstants.DLP_STATUS_PROP));
+        /*
         System.out.println("++++++++++++++++++++++++++++++++==");
         System.out.println("++++++++++++++++++++++++++++++++==");
         System.out.println("++++++++++++++++++++++++++++++++==");
@@ -237,5 +238,6 @@ public class TestDataLossPreventionScanner {
             System.out.println(map.get("type"));
             System.out.println(map.get("locationJson"));
         }
+        */
     }
 }

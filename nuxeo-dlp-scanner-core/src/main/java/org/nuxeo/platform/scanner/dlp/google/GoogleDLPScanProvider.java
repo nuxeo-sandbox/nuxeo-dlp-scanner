@@ -92,6 +92,8 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
     private boolean enabled = true;
 
     private boolean convertToText = true;
+    
+    private Boolean nextIdentifyConvertToText = null;
 
     private boolean includeQuote = true;
 
@@ -231,8 +233,14 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
             if (mimeType == null) {
                 mimeType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(blob.getFile());
             }
+            
+            boolean doConvertToText = convertToText;
+            if(nextIdentifyConvertToText != null) {
+                doConvertToText = nextIdentifyConvertToText.booleanValue();
+                nextIdentifyConvertToText = null;
+            }
 
-            if (convertToText
+            if (doConvertToText
                     && (mimeType == null || (!mimeType.startsWith("text") && !mimeType.startsWith("image")))) {
                 try {
                     ConversionService conv = Framework.getService(ConversionService.class);
@@ -524,6 +532,11 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
             ListInfoTypesResponse infoTypesResponse = dlpClient.listInfoTypes(request);
             return infoTypesResponse.getInfoTypesList();
         }
+    }
+
+    @Override
+    public void setNextIdentifyConvertToTextValue(boolean value) {
+        nextIdentifyConvertToText = value;
     }
 
 }
