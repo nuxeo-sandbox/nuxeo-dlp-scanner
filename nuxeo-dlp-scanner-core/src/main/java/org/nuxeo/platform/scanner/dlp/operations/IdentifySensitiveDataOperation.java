@@ -87,7 +87,7 @@ public class IdentifySensitiveDataOperation {
         }
 
         // Get results
-        ScanResult res = runWorker(bh);
+        ScanResult res = identify(bh);
 
         // Update properties
         Property findingProp = doc.getProperty(DLPScanConstants.DLP_FINDINGS);
@@ -121,12 +121,12 @@ public class IdentifySensitiveDataOperation {
     }
 
     @OperationMethod
-    public Blob run(Blob blob) throws IOException {
-        ScanResult result = runWorker(new SimpleBlobHolder(blob));
+    public Blob identify(Blob blob) throws IOException {
+        ScanResult result = identify(new SimpleBlobHolder(blob));
         return Blobs.createJSONBlobFromValue(result);
     }
 
-    protected ScanResult runWorker(BlobHolder bh) throws IOException {
+    protected ScanResult identify(BlobHolder bh) throws IOException {
         return service.identify(bh.getBlob(), infoTypes, maxFindings);
     }
 

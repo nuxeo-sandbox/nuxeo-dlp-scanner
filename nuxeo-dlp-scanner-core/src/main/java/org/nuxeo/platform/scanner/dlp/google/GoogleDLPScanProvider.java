@@ -75,7 +75,6 @@ import com.google.privacy.dlp.v2.ProjectName;
 import com.google.privacy.dlp.v2.RedactImageRequest;
 import com.google.privacy.dlp.v2.RedactImageResponse;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.Descriptors.FieldDescriptor;
 
 /**
  * @since 10.10
