@@ -1,6 +1,6 @@
 services:
   nuxeo:
-    image: nuxeo-dlp-scanner:2023.2.0-SNAPSHOT
+    image: nuxeo-dlp-scanner:2023.3.0-SNAPSHOT
     env_file:
       - ./.env
     ports:

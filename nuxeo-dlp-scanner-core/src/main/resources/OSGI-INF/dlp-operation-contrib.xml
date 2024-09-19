@@ -4,6 +4,7 @@
   <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="org.nuxeo.platform.scanner.dlp.operations.IdentifySensitiveDataOperation"/>
     <operation class="org.nuxeo.platform.scanner.dlp.operations.RedactSensitiveDataOperation"/>
+    <operation class="org.nuxeo.platform.scanner.dlp.operations.CreateNevRedactionAnnotations"/>
   </extension>
 
 </component>
