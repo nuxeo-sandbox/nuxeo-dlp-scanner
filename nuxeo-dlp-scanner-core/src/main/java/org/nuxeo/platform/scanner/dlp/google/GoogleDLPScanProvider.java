@@ -43,6 +43,8 @@ import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.convert.api.ConversionException;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
+import org.nuxeo.ecm.platform.picture.api.ImageInfo;
+import org.nuxeo.ecm.platform.picture.api.ImagingService;
 import org.nuxeo.platform.scanner.dlp.service.RedactionProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanFinding;
 import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
@@ -253,6 +255,12 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                 }
             }
 
+            //if image, get dimensions
+            ImageInfo imageinfo = null;
+            if(mimeType !=null && mimeType.startsWith("image")) {
+                imageinfo = Framework.getService(ImagingService.class).getImageInfo(blob);
+            }
+
             ByteContentItem.BytesType bytesType;
             switch (mimeType) {
             case "image/jpeg":
@@ -326,6 +334,12 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                     JSONObject locationJson = new JSONObject();
                     locationJson.put("hasByteRange", location.hasByteRange());
                     locationJson.put("hasCodepointRange", location.hasCodepointRange());
+
+                    if(imageinfo != null) {
+                        locationJson.put("pageWidth", imageinfo.getWidth());
+                        locationJson.put("pageHeight", imageinfo.getHeight());
+                    }
+
                     int contentLocationCount = location.getContentLocationsCount();
                     JSONArray locations = new JSONArray();
                     // Maybe we should get only first location?
@@ -342,6 +356,7 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                                 oneLoc.put("left", bb.getLeft());
                                 oneLoc.put("width", bb.getWidth());
                                 oneLoc.put("height", bb.getHeight());
+
                                 locations.put(oneLoc);
                                 
                                 if(!firstImageLocHandled) {

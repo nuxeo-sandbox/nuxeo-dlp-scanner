@@ -98,6 +98,9 @@ public class CreateNevRedactionAnnotations {
                 continue;
             }
 
+            int pageWidth = json.get("pageWidth").asInt();
+            int pageHeight = json.get("pageHeight").asInt();
+
             JsonNode locations = json.get("imageLocations");
 
             locations.iterator().forEachRemaining(location -> {
@@ -108,11 +111,19 @@ public class CreateNevRedactionAnnotations {
 
                 annotation.setOrigin("ARender");
 
+                //convert coordinates
+                int top = location.get("top").asInt();
+                int left = location.get("left").asInt();
+                int width = location.get("width").asInt();
+                int height =  location.get("height").asInt();
+
+                int[] bottomLeft = new int[]{left, pageHeight - (top + height)};
+                int[] topRight = new int[]{left + width, pageHeight - top};
+
                 String annotationText = String.format("""
                                 <?xml version="1.0" encoding="UTF-8"?><ns0:xfdf xmlns:ns0="http://ns.adobe.com/xfdf/"><ns0:annots><ns0:redact color="#000000" flags="" name="%s" last-modifier="System" page="0" rect="%d,%d,%d,%d" title="%s" creationdate="D:20240919020457+00'00'" opacity="1.0" interior-color="#000000" overlay-text="(b)(2)"/></ns0:annots></ns0:xfdf>""",
                         annotation.getId(),
-                        location.get("top").asInt(), location.get("left").asInt(),
-                        location.get("width").asInt(), location.get("height").asInt(),
+                        bottomLeft[0], bottomLeft[1], topRight[0], topRight[1],
                         item.get("type"));
 
                 annotation.setEntityId(annotation.getId());
