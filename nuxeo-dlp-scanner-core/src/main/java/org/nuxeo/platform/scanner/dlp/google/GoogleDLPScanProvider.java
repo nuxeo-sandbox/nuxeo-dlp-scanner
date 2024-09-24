@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import com.google.privacy.dlp.v2.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,31 +52,9 @@ import org.nuxeo.platform.scanner.dlp.service.ScanProvider;
 import org.nuxeo.platform.scanner.dlp.service.ScanResult;
 import org.nuxeo.runtime.api.Framework;
 
-import com.google.privacy.dlp.v2.BoundingBox;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.cloud.dlp.v2.DlpServiceSettings;
-import com.google.privacy.dlp.v2.ByteContentItem;
-import com.google.privacy.dlp.v2.ContentItem;
-import com.google.privacy.dlp.v2.ContentLocation;
-import com.google.privacy.dlp.v2.CreateInspectTemplateRequest;
-import com.google.privacy.dlp.v2.CustomInfoType;
-import com.google.privacy.dlp.v2.Finding;
-import com.google.privacy.dlp.v2.ImageLocation;
-import com.google.privacy.dlp.v2.InfoType;
-import com.google.privacy.dlp.v2.InfoTypeDescription;
-import com.google.privacy.dlp.v2.InspectConfig;
 import com.google.privacy.dlp.v2.InspectConfig.FindingLimits;
-import com.google.privacy.dlp.v2.InspectContentRequest;
-import com.google.privacy.dlp.v2.InspectContentResponse;
-import com.google.privacy.dlp.v2.InspectResult;
-import com.google.privacy.dlp.v2.InspectTemplate;
-import com.google.privacy.dlp.v2.Likelihood;
-import com.google.privacy.dlp.v2.ListInfoTypesRequest;
-import com.google.privacy.dlp.v2.ListInfoTypesResponse;
-import com.google.privacy.dlp.v2.Location;
-import com.google.privacy.dlp.v2.ProjectName;
-import com.google.privacy.dlp.v2.RedactImageRequest;
-import com.google.privacy.dlp.v2.RedactImageResponse;
 import com.google.protobuf.ByteString;
 
 /**
@@ -274,6 +253,18 @@ public class GoogleDLPScanProvider implements RedactionProvider, ScanProvider, G
                 break;
             case "image/svg":
                 bytesType = ByteContentItem.BytesType.IMAGE_SVG;
+                break;
+            case "application/pdf":
+                bytesType = ByteContentItem.BytesType.PDF;
+                break;
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                bytesType = ByteContentItem.BytesType.WORD_DOCUMENT;
+                break;
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                bytesType = ByteContentItem.BytesType.EXCEL_DOCUMENT;
+                break;
+            case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                bytesType = ByteContentItem.BytesType.POWERPOINT_DOCUMENT;
                 break;
             default:
                 bytesType = ByteContentItem.BytesType.BYTES_TYPE_UNSPECIFIED;

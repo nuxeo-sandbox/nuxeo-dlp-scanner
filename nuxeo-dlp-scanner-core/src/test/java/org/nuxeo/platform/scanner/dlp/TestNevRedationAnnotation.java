@@ -59,7 +59,7 @@ public class TestNevRedationAnnotation {
         sensitiveData.put("info","AAA-GG-SSS");
         sensitiveData.put("score","LIKELY");
         sensitiveData.put("locationJson", """
-                {"hasImageLocation":true,"pageWidth":540,"pageHeight":358,"imageLocations":[{"top":120,"left":220,"width":124,"height":27}],"hasCodepointRange":false,"hasByteRange":false,"firstImageLocation":{"top":120,"left":220,"width":124,"height":27}}
+                {"hasImageLocation":true,"pageNumber":1,"pageWidth":540,"pageHeight":358,"imageLocations":[{"top":120,"left":220,"width":124,"height":27}],"hasCodepointRange":false,"hasByteRange":false,"firstImageLocation":{"top":120,"left":220,"width":124,"height":27}}
                 """);
 
         doc.setPropertyValue("dlp:sensitiveData", true);
