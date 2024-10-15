@@ -46,7 +46,8 @@ import java.util.Map;
  */
 @Operation(id = CreateNevRedactionAnnotations.ID, category = "NEV",
         label = "Create DLP NEV Redaction Annotations",
-        description = "Create NEV Redaction annotations based on the stored dlp info")
+        description = "Create NEV Redaction annotations based on the stored dlp info."
+        + " annotationColor is an optionnal parameter. Value must be passed has hexacolor, like #rrggbb, including the #")
 public class CreateNevRedactionAnnotations {
 
     public static final Logger log = LogManager.getLogger(CreateNevRedactionAnnotations.class);
@@ -61,6 +62,9 @@ public class CreateNevRedactionAnnotations {
 
     @Param(name = "xpath", required = false, values = {"file:content"})
     protected String xpath = "file:content";
+    
+    @Param(name="annotationColor", required = false, values = {"#000000"})
+    protected String annotationColor = "#000000";
 
     @OperationMethod(collector = DocumentModelCollector.class)
     public DocumentModel run(DocumentModel doc) throws IOException {
@@ -120,8 +124,12 @@ public class CreateNevRedactionAnnotations {
                 int[] bottomLeft = new int[]{left, pageHeight - (top + height)};
                 int[] topRight = new int[]{left + width, pageHeight - top};
 
+                if(StringUtils.isBlank(annotationColor)) {
+                    annotationColor = "#000000";
+                }
                 String annotationText = String.format("""
-                                <?xml version="1.0" encoding="UTF-8"?><ns0:xfdf xmlns:ns0="http://ns.adobe.com/xfdf/"><ns0:annots><ns0:redact color="#000000" flags="" name="%s" last-modifier="System" page="%d" rect="%d,%d,%d,%d" title="%s" creationdate="D:20240919020457+00'00'" opacity="1.0" interior-color="#000000" overlay-text="(b)(2)"/></ns0:annots></ns0:xfdf>""",
+                                <?xml version="1.0" encoding="UTF-8"?><ns0:xfdf xmlns:ns0="http://ns.adobe.com/xfdf/"><ns0:annots><ns0:redact color="%s" flags="" name="%s" last-modifier="System" page="%d" rect="%d,%d,%d,%d" title="%s" creationdate="D:20240919020457+00'00'" opacity="1.0" interior-color="#000000" overlay-text="(b)(2)"/></ns0:annots></ns0:xfdf>""",
+                        annotationColor,
                         annotation.getId(),
                         pageNumber,
                         bottomLeft[0], bottomLeft[1], topRight[0], topRight[1],
