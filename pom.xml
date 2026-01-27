@@ -65,7 +65,7 @@
     </repository>
     <repository>
       <id>maven-private</id>
-      <url>https://packages.nuxeo.com/repository/maven-internal/</url>
+      <url>https://packages.nuxeo.com/repository/maven-private/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
