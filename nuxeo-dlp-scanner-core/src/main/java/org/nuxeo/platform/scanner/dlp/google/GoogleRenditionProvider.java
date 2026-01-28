@@ -146,7 +146,7 @@ public class GoogleRenditionProvider implements RenditionProvider {
         try {
             PDFMergerUtility ut = new PDFMergerUtility();
             for (Blob blob : parts) {
-                ut.addSource(blob.getStream());
+                ut.addSource(blob.getCloseableFile().getFile());
             }
             return appendPDFs(ut, input.getBlob().getFilename());
         } catch (IOException iox) {
@@ -157,7 +157,7 @@ public class GoogleRenditionProvider implements RenditionProvider {
     protected Blob appendPDFs(PDFMergerUtility ut, String filename) throws IOException {
         File tempFile = Framework.createTempFile("redacted_" + filename, ".pdf");
         ut.setDestinationFileName(tempFile.getAbsolutePath());
-        ut.mergeDocuments();
+        ut.mergeDocuments(null);
         Blob fb = Blobs.createBlob(tempFile);
         Framework.trackFile(tempFile, fb);
         fb.setFilename(tempFile.getName());
