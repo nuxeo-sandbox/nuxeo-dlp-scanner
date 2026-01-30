@@ -12,7 +12,6 @@
   <packaging>pom</packaging>
   <properties>
     <nuxeo.skip.enforcer>true</nuxeo.skip.enforcer>
-    <nuxeo.target.version>2025.*</nuxeo.target.version>
     <skipDocker>true</skipDocker>
     <pushReleaseChanges>false</pushReleaseChanges>
   </properties>
